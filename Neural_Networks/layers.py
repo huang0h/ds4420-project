@@ -65,7 +65,7 @@ class Fully_Connected():
         self.activation = activation
 
         ## Initializes the optimizer function.
-        self.optimizer = optimizer
+        self.optimizer = optimizer(self.activation, self.lr)
 
         ## Initializes the outputs for this layer.
         self.x = np.zeros(shape = (self.in_shape[0], self.out_shape))
@@ -110,10 +110,31 @@ class Fully_Connected():
         self.x = self.input.dot(self.weights) + self.bias
 
         ## Use the activation function to get the final outputs for this layer.
-        self.x = self.activation.activate(self.x)
+        output = self.activation.activate(self.x)
 
         ## Return the outputs for this layer.
-        return self.x
+        return output
+    
+    ## Performs the backward propagation/pass in a fully connected layer on CPU
+    def backward_propagate(self, out_delta):
+        '''
+        Executes the backward pass for this layer using CPU.
+
+        Args:
+            out_delta (np.array): The dot product of the gradient of the succeeding layer and the weights between this layer and the preceding layer.
+
+        Returns:
+            in_delta (np.array): The dot product of the gradient of this layer and the weights between the previous layer and this layer.
+        '''
+        ## Perform backward propagation using defined optimizer function.
+        in_delta, w_prime, b_prime = self.optimizer.optimizeGrad(self.x, self.input, self.weights, self.bias, out_delta)
+
+        ## Update current weights and biases.
+        self.weights = w_prime
+        self.bias = b_prime
+
+        ## Return the error for this layer.
+        return in_delta
     
 ##########################################################################################################################################################################
 ## Neural Network layers created using CuPy.
@@ -171,7 +192,7 @@ class Fully_Connected_GPU():
         self.activation = activation
 
         ## Initializes the optimizer function.
-        self.optimizer = optimizer
+        self.optimizer = optimizer(self.activation, self.lr)
 
         ## Initializes the outputs for this layer on the GPU.
         self.x = cp.zeros(shape = (self.in_shape[0], self.out_shape))
@@ -217,7 +238,28 @@ class Fully_Connected_GPU():
         self.x = self.input.dot(self.weights) + self.bias
 
         ## Use the activation function to get the final outputs for this layer.
-        self.x = self.activation.activate(self.x)
+        output = self.activation.activate(self.x)
 
         ## Return the outputs for this layer.
-        return self.x
+        return output
+    
+    ## Performs the backward propagation/pass in a fully connected layer on GPU
+    def backward_propagate(self, out_delta):
+        '''
+        Executes the backward pass for this layer using GPU.
+
+        Args:
+            out_delta (cp.array): The dot product of the gradient of the succeeding layer and the weights between this layer and the preceding layer.
+
+        Returns:
+            in_delta (cp.array): The dot product of the gradient of this layer and the weights between the previous layer and this layer.
+        '''
+        ## Perform backward propagation using defined optimizer function.
+        in_delta, w_prime, b_prime = self.optimizer.optimizeGrad(self.x, self.input, self.weights, self.bias, out_delta)
+
+        ## Update current weights and biases.
+        self.weights = w_prime
+        self.bias = b_prime
+
+        ## Return the error for this layer.
+        return in_delta
