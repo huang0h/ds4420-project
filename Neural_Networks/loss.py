@@ -9,10 +9,10 @@ import cupy as cp
 ## Matrix operations are compiled on CPU.
 ##########################################################################################################################################################################
 
-## A class that represents the Mean Absolute Error compiled on the CPU.
-class MAE():
+## A class that represents the Mean Squared Error compiled on the CPU.
+class MSE():
     '''
-    A class that computes the Mean Absolute Error between the true value and the predicted value.
+    A class that computes the Mean Squared Error between the true value and the predicted value.
 
     Attributes:
         activation (activations): The activation used on the classifier layer.
@@ -24,10 +24,10 @@ class MAE():
     Usage:
         A method to calculate the loss between the model and the actual values.
     '''
-    ## Initializes the MAE function on the CPU.
+    ## Initializes the MSE function on the CPU.
     def __init__(self, activation):
         '''
-        Initializes the parameters for MAE function.
+        Initializes the parameters for MSE function.
 
         Args:
             activation (activations): The activation used on the classifier layer.
@@ -37,27 +37,27 @@ class MAE():
         '''
         self.activation = activation
 
-    ## Calculates the loss between the true value and the model's predictions on CPU.
+    ## Calculates the loss between the true value and the model's predictions using MSE on CPU.
     def calculateLoss(self, actual_value, predictions):
         '''
-        Returns the average loss between the actual values and the model's predictions.
+        Returns the average MSE loss between the actual values and the model's predictions.
 
         Args:
             actual_value (np.array): An array containing all the true values.
             predictions (np.array): An array containing all the predictions from the model.
 
         Returns:
-            mae (np.array): An array storing all the Mean Absolute Errors for each batch.
+            mse (np.array): An array storing all the Mean Squared Errors for each batch.
         '''
-        ## Calculate the Mean Absolute Error between the actual value and the model's predictions.
-        mae = np.mean(np.abs(actual_value - predictions), axis = 1)
-        ## Return the MAE value.
-        return mae
+        ## Calculate the Mean Squared Error between the actual value and the model's predictions.
+        mse = np.mean((actual_value - predictions)**2, axis = 1)
+        ## Return the MSE value.
+        return mse
     
-    ## Computes the gradient of the MAE loss function.
+    ## Computes the gradient of the MSE loss function.
     def calculateLossGrad(self, actual_value, predictions):
         '''
-        Returns the gradient of the loss function compiled on CPU.
+        Returns the gradient of the MSE loss function compiled on CPU.
 
         Args:
             actual_value (np.array): An array containing all the true values.
@@ -69,15 +69,15 @@ class MAE():
         ## Find the number of elements in the actual value vector.
         num_elements = actual_value.shape[0]
         ## Calculate the gradient of the MAE function.
-        nabla_mae = (-1 / num_elements) * (np.sign(actual_value - predictions))
+        nabla_mae = (2 / num_elements) * (predictions - actual_value)
 
-        ## Find the gradient of the activation function and multiply with error of the MAE function.
+        ## Find the gradient of the activation function and multiply with error of the MSE function.
         nabla_activation = self.activation.activateGrad(predictions)
         delta = nabla_mae * nabla_activation
 
-        ## Return the gradient of MAE w.r.t. the output layer.
+        ## Return the gradient of MSE w.r.t. the output layer.
         return delta
-    
+        
 ##########################################################################################################################################################################
 ## Neural Network loss functions created using CuPy.
 ## Matrix operations are compiled on GPU.
