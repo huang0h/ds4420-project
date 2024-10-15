@@ -15,7 +15,7 @@ class MAE():
     A class that computes the Mean Absolute Error between the true value and the predicted value.
 
     Attributes:
-        None
+        activation (activations): The activation used on the classifier layer.
 
     Methods:
         calculateLoss (self, actual_value, predictions): Calculates the error between the true value and the model's predictions.
@@ -25,17 +25,17 @@ class MAE():
         A method to calculate the loss between the model and the actual values.
     '''
     ## Initializes the MAE function on the CPU.
-    def __init__(self):
+    def __init__(self, activation):
         '''
         Initializes the parameters for MAE function.
 
         Args:
-            None
+            activation (activations): The activation used on the classifier layer.
 
         Returns:
             None
         '''
-        pass
+        self.activation = activation
 
     ## Calculates the loss between the true value and the model's predictions on CPU.
     def calculateLoss(self, actual_value, predictions):
@@ -62,16 +62,21 @@ class MAE():
         Args:
             actual_value (np.array): An array containing all the true values.
             predictions (np.array): An array containing all the predictions from the model.
-
+            
         Returns:
-            nabla_mae (np.array): An array storing all the gradient error values for each batch.
+            delta (np.array): An array storing all the gradient error values for each batch w.r.t. the output layer.
         '''
         ## Find the number of elements in the actual value vector.
         num_elements = actual_value.shape[0]
         ## Calculate the gradient of the MAE function.
         nabla_mae = (-1 / num_elements) * (np.sign(actual_value - predictions))
-        ## Return the gradient of MAE.
-        return nabla_mae
+
+        ## Find the gradient of the activation function and multiply with error of the MAE function.
+        nabla_activation = self.activation.activateGrad(predictions)
+        delta = nabla_mae * nabla_activation
+
+        ## Return the gradient of MAE w.r.t. the output layer.
+        return delta
     
 ##########################################################################################################################################################################
 ## Neural Network loss functions created using CuPy.
