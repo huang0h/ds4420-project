@@ -67,7 +67,7 @@ class MSE():
             delta (np.array): An array storing all the gradient error values for each batch w.r.t. the output layer.
         '''
         ## Find the number of elements in the actual value vector.
-        num_elements = actual_value.shape[0]
+        num_elements = actual_value.shape[1]
         ## Calculate the gradient of the MAE function.
         nabla_mae = (2 / num_elements) * (predictions - actual_value)
 
