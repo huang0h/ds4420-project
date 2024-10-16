@@ -79,44 +79,6 @@ class SGD():
         ## Return the error of this layer, updated weights, and updated biases.
         return in_delta, w_prime, b_prime
     
-    ## Performs the optimization process on the final layer.
-    def optimizeLossGrad(self, input, weights, bias, loss_delta, lr):
-        '''
-        Performs SGD optimization on the final layer, updating the weights and biases as well as find the error for 
-        the previous layer.
-
-        Args:
-            input (np.array): The input for the output layer.
-            weights (np.array): The array representing the weights.
-            bias (np.array): The array representing the biases.
-            out_delta (np.array): The array representing the gradient of the succeeding layer.
-            lr (float): The learning rate for optimizer.
-
-        Returns:
-            in_delta (np.array): An array representing the gradient of this layer.
-            w_prime (np.array): The updated weights.
-            b_prime (np.array): The updated biases.
-        '''
-        ## The batch size used in this layer.
-        batch_size = input.shape[0]
-
-        ## Calucate the average change in weights over all the batches.
-        nabla_w = input.T.dot(loss_delta)
-        nabla_w = nabla_w / batch_size
-
-        ## Find the average change in biases over all the batches.
-        nabla_b = np.sum(loss_delta, axis = 0) / batch_size
-
-        ## Compute the updated weights and biases.
-        w_prime = weights - (lr * nabla_w)
-        b_prime = bias - (lr * nabla_b)
-
-        ## Calculate the error of this layer.
-        in_delta = loss_delta.dot(weights.T)
-
-        ## Return the error of this layer, updated weights, and updated biases.
-        return in_delta, w_prime, b_prime
-    
 ##########################################################################################################################################################################
 ## Neural Network optimzer functions created using CuPy.
 ## Matrix operations are compiled on GPU.
