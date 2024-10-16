@@ -1,0 +1,3 @@
+rawdata/*.json
+rawdata/*.zip
+!rawdata/*_data.zip
