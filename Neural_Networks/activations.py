@@ -12,7 +12,7 @@ import cupy as cp
 ## A class representing the Softmax activation function.
 class Softmax():
     '''
-    A clsas that contains the Softmax activation function as well as its derivative on CPU.
+    A class that contains the Softmax activation function as well as its derivative on CPU.
 
     Attributes:
         None
