@@ -15,7 +15,7 @@ class MSE():
     A class that computes the Mean Squared Error between the true value and the predicted value.
 
     Attributes:
-        activation (activations): The activation used on the classifier layer.
+        None
 
     Methods:
         calculateLoss (self, actual_value, predictions): Calculates the error between the true value and the model's predictions.
@@ -25,17 +25,17 @@ class MSE():
         A method to calculate the loss between the model and the actual values.
     '''
     ## Initializes the MSE function on the CPU.
-    def __init__(self, activation):
+    def __init__(self):
         '''
         Initializes the parameters for MSE function.
 
         Args:
-            activation (activations): The activation used on the classifier layer.
+            None
 
         Returns:
             None
         '''
-        self.activation = activation
+        pass
 
     ## Calculates the loss between the true value and the model's predictions using MSE on CPU.
     def calculateLoss(self, actual_value, predictions):
@@ -50,7 +50,8 @@ class MSE():
             mse (np.array): An array storing all the Mean Squared Errors for each batch.
         '''
         ## Calculate the Mean Squared Error between the actual value and the model's predictions.
-        mse = np.mean((actual_value - predictions)**2, axis = 1)
+        mse_batch = np.mean((actual_value - predictions)**2, axis = 1)
+        mse = np.mean(mse_batch)
         ## Return the MSE value.
         return mse
     
@@ -64,19 +65,15 @@ class MSE():
             predictions (np.array): An array containing all the predictions from the model.
             
         Returns:
-            delta (np.array): An array storing all the gradient error values for each batch w.r.t. the output layer.
+            delta (np.array): An array storing all the gradient error values for each batch w.r.t. the activation function.
         '''
         ## Find the number of elements in the actual value vector.
         num_elements = actual_value.shape[1]
         ## Calculate the gradient of the MAE function.
-        nabla_mae = (2 / num_elements) * (predictions - actual_value)
+        nabla_mse = (2 / num_elements) * (predictions - actual_value)
 
-        ## Find the gradient of the activation function and multiply with error of the MSE function.
-        nabla_activation = self.activation.activateGrad(predictions)
-        delta = nabla_mae * nabla_activation
-
-        ## Return the gradient of MSE w.r.t. the output layer.
-        return delta
+        ## Return the gradient of MSE w.r.t. the activation function of the output layer.
+        return nabla_mse
         
 ##########################################################################################################################################################################
 ## Neural Network loss functions created using CuPy.
