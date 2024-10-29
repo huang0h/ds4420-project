@@ -74,6 +74,76 @@ class MSE():
 
         ## Return the gradient of MSE w.r.t. the activation function of the output layer.
         return nabla_mse
+
+## A class that represents the Binary Cross Entropy Loss Function compiled on CPU.
+class Binary_Cross_Entropy():
+    '''
+    A class that computes the Binary Cross Entropy Loss between the true value and the predicted value.
+
+    Attributes:
+        None
+
+    Methods:
+        calculateLoss (self, actual_value, predictions): Calculates the error between the true value and the model's predictions.
+        calculateLossGrad (self, actual_value, predictions): Calculates the gradient of the error between the true value and the model's predictions.
+
+    Usage:
+        A method to calculate the loss between the model and the actual values.
+    '''
+    ## Initializes the BCE function on the CPU.
+    def __init__(self):
+        '''
+        Initializes the parameters for BCE function.
+
+        Args:
+            None
+
+        Returns:
+            None
+        '''
+        pass
+
+    ## Calculates the loss function between the true value and the model's predictions using BCE compiled on CPU.
+    def calculateLoss(self, actual_value, predictions):
+        '''
+        Returns the average BCE loss function compiled on CPU.
+
+        Args:
+            actual_value (np.array): An array containing all the true values.
+            predictions (np.array): An array containing all the predictions from the model.
+
+        Returns:
+            bce (np.array): An array storing all the Binary Cross Entropy for each batch.
+        '''
+        ## Adjusted predictions such that no values are 0 (has issues with log).
+        pred_adj = predictions + 1e-100
+        ## Calculate the BCE loss on each batch.
+        bce_batch = -1 * np.mean((actual_value * np.log(pred_adj)) + ((1 - actual_value) * np.log(1 - pred_adj)), axis = 1)
+        ## Averages the BCE loss over batches.
+        bce = np.mean(bce_batch)
+        ## Returns average BCE loss.
+        return bce
+    
+    ## Computes the gradient of the BCE loss function.
+    def calculateLossGrad(self, actual_value, predictions):
+        '''
+        Returns the gradient of the BCE loss function compiled on CPU.
+
+        Args:
+            actual_value (np.array): An array containing all the true values.
+            predictions (np.array): An array containing all the predictions from the model.
+            
+        Returns:
+            nabla_bce (np.array): An array storing all the gradient error values for each batch w.r.t. the activation function.
+        '''
+        ## Calculates the number of classes in the output.
+        num_elements = actual_value.shape[1]
+        ## Adjusts the predictions so that it's not 0 (has issue with log).
+        pred_adj = predictions + 1e-100
+        ## Computes the gradient of the BCE loss function w.r.t. the activation function.
+        nabla_bce = (-1 / num_elements) * ((actual_value / pred_adj) - ((1 - actual_value) / (1 - pred_adj)))
+        ## Returns the gradient of the BCE loss function.
+        return nabla_bce
         
 ##########################################################################################################################################################################
 ## Neural Network loss functions created using CuPy.
