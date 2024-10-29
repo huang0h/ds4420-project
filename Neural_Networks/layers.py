@@ -20,7 +20,6 @@ class Fully_Connected():
     A class that acts as the fully connected layer with forward and backward propagation on CPU.
 
     Attributes:
-        batch_size (int): The number of batches in the input.
         in_neurons (int): An integer representing the shape of the input.
         out_neurons (int): An integer representing the shape of the output.
         activation (activations): The activation function use for each neuron.
