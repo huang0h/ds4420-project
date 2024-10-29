@@ -36,12 +36,11 @@ class Fully_Connected():
         Used for building the dense portion of a neural network.
     '''
     ## Initializes the Fully Connected layer instance.
-    def __init__(self, batch_size, in_neurons, out_neurons, activation, test_weights = None, test_bias = None):
+    def __init__(self, in_neurons, out_neurons, activation, test_weights = None, test_bias = None):
         '''
         Initializes the fully connected layer on CPU.
 
         Args:
-            batch_size (int): The number of batches in the input.
             in_neurons (int): An integer representing the number of input neurons.
             out_neurons (int): An integer representing the number of output neurons.
             activation (activations): The activation function use for each neuron.
@@ -53,14 +52,14 @@ class Fully_Connected():
         '''
         ## Initializes the input and output shape, as well as the learning rate.
         self.inputs = None
-        self.in_shape = (batch_size, in_neurons)
+        self.in_shape = in_neurons
         self.out_shape = out_neurons
 
         ## Assigns the activation function.
         self.activation = activation
 
         ## Initializes the outputs for this layer.
-        self.x = np.zeros(shape = (self.in_shape[0], self.out_shape))
+        self.x = None
         
         ## If user inputs test weights and biases, assigns them as private variables.
         if test_weights is None and test_bias is None:
@@ -87,7 +86,7 @@ class Fully_Connected():
         ## If weights is None, initialize it using Glorot Uniform Weight Initializer.
         if self.weights is None:
             ## The number of features in the input.
-            n_in = self.in_shape[1]
+            n_in = self.in_shape
             ## The number of features in the output.
             n_out = self.out_shape
             ## Initialized weights using Glorot Uniform Weight Initializer.
