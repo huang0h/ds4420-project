@@ -1,3 +1,5 @@
-rawdata/*.json
+rawdata/*
 rawdata/*.zip
 !rawdata/*_data.zip
+
+**/__pycache__
