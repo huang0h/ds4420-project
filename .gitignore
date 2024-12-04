@@ -3,5 +3,6 @@ rawdata/*.zip
 !rawdata/*_data.zip
 
 hybrid_collaborative_filtering/saved_models/**
+final_model/saved_models/**
 
 **/__pycache__
