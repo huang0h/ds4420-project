@@ -19,13 +19,13 @@ class HybridCF:
         with open(f'{dirname}/{USER_NEIGHBORHOODS_FILE}', 'r') as f:
             neighborhoods = json.load(f)
             
-        with open('msd_subset_audio_features_normalized.json', 'r') as f:
+        with open('../data/msd_subset_audio_features_normalized.json', 'r') as f:
             all_track_features = json.load(f)
             
-        with open('msd_user_setlists.json', 'r') as f:
+        with open('../data/msd_user_setlists.json', 'r') as f:
             user_setlists = json.load(f)
             
-        with open('msd_average_user_profiles.json', 'r') as f:
+        with open('../data/msd_average_user_profiles.json', 'r') as f:
             average_user_profiles = json.load(f)
             
         self.user_similarity = sims
